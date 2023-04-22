@@ -6,7 +6,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
 @Module({
-  imports: [JwtModule.register({})],
+  imports: [JwtModule.register({})], // sign in the jwt to register it, you can provide secrets and such
   controllers: [AuthController],
   providers: [AuthService],
 })

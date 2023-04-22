@@ -20,7 +20,7 @@ model User {
 
   firstName String?
   lastname  String?
-  bookmarks Bookmark[]
+  bookmarks Bookmark[] // booksmarks belong to the user
 
   @@map("users") // change the label inside of the db
 }
@@ -37,5 +37,5 @@ model Bookmark {
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
-  @@map("bookmarks")
+  @@map("bookmarks") // change the label inside of the db
 }
