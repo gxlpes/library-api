@@ -1,13 +1,14 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import * as argon from 'argon2';
+import { DbService } from 'src/db/db.service';
 
 import { AuthDto } from './dto';
-import { DbService } from 'src/db/db.service';
 
 @Injectable({})
 export class AuthService {
-  constructor(private db: DbService) {}
+  constructor(private db: DbService, private jwt: JwtService) {}
 
   async signup(dto: AuthDto) {
     // generate the passsword hash
@@ -51,5 +52,14 @@ export class AuthService {
 
     delete user.hash;
     return user;
+  }
+
+  async signToken(userId: number, email: string) {
+    const data = {
+      sub: userId,
+      email,
+    };
+
+    return this.jwt.sign;
   }
 }
