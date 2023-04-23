@@ -27,11 +27,7 @@ export class AuthService {
         },
       });
 
-      // it's possible to create a "select" object to return certain things
-      delete user.hash; // deleting the hash password
-
-      // return the saved user
-      return user;
+      return this.signToken(user.id, user.email);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         console.log(error.message);
@@ -59,15 +55,17 @@ export class AuthService {
     return this.signToken(user.id, user.email);
   }
 
-  signToken(userId: number, email: string): Promise<string> {
+  async signToken(userId: number, email: string): Promise<{ access_token: string }> {
     const payload = {
       sub: userId, // sub is just a standard label used in jwt
       email,
     };
 
-    return this.jwt.signAsync(payload, {
+    const token = await this.jwt.signAsync(payload, {
       expiresIn: '15m',
       secret: this.config.get('JWT_SECRET'),
     });
+
+    return { access_token: token };
   }
 }
